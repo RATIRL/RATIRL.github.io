@@ -1,0 +1,25 @@
+body {
+  background-image: url("rat.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+.container{
+  width:80%;
+  margin:auto;
+  overflow:hidden;
+  text-align: center;
+}
+
+.goed {
+  color: green;
+  text-shadow: 0px 0px 20px #fff, 0px 0px 20px #fff, 0px 0px 20px #fff;
+}
+
+.slecht {
+  color: red;
+  text-shadow: 0px 0px 20px #fff, 0px 0px 20px #fff, 0px 0px 20px #fff;
+}
+

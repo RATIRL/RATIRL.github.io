@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ali Trabi HIBP API</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.6.0/sha1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("button").click(function() {
+                var pw = document.getElementById("invulVeld").value;
+                var hash = sha1(pw);
+                var prefix = hash.substring(0, 5);
+                var suffix = hash.substring(5, 100);
+                var link = "https://api.pwnedpasswords.com/range/".concat(prefix);
+                $.get(link, function(data, status) {
+                    var arr = data.toLowerCase().split("\n");
+                    var komtNietVoor = true;
+                    for (elk of arr) {
+                        if (elk.includes(suffix)){
+                            komtNietVoor = false;
+                            var frequentie = elk.split(':').pop();
+                            if (frequentie > 300) {
+                                var tekst = "<h2 style='color:red; text-shadow: 0px 0px 20px #fff, 0px 0px 20px #fff, 0px 0px 20px #fff;'>Wachtwoord geweigerd! Het komt meer dan 300 keer voor.</h2>";
+                                tekst += "<br><h2 style='color:red; text-shadow: 0px 0px 20px #fff, 0px 0px 20px #fff, 0px 0px 20px #fff;'>Het komt ";
+                                tekst += (String(frequentie));
+                                tekst += " keer voor.</h2>";
+                                $("#antwoord").html(tekst);
+                            } else{
+                                var tekst = "<h2 style='color:green; text-shadow: 0px 0px 20px #fff, 0px 0px 20px #fff, 0px 0px 20px #fff;'>Wachtwoord goedgekeurd!</h2>";
+                                tekst += "<br><h2 style='color:green; text-shadow: 0px 0px 20px #fff, 0px 0px 20px #fff, 0px 0px 20px #fff;'>Het komt ";
+                                tekst += (String(frequentie));
+                                tekst += " keer voor.</h2>";
+                                $("#antwoord").html(tekst);
+                            }
+                        }
+                        if (komtNietVoor){
+                            var tekst = "<h2 style='color:green; text-shadow: 0px 0px 20px #fff, 0px 0px 20px #fff, 0px 0px 20px #fff;'>Wachtwoord SUPER-goedgekeurd!</h2>";
+                            tekst += "<br><h2 style='color:green; text-shadow: 0px 0px 20px #fff, 0px 0px 20px #fff, 0px 0px 20px #fff;'>Het komt ";
+                            tekst += "nog niet voor in de HIBW database!.</h2>";
+                            $("#antwoord").html(tekst);
+                        }
+                    }
+                })
+            })
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Wordt dit wachtwoord te vaak gebruikt?</h1>
+        <h2>Wachtwoord:</h2>
+        <input style="width: 250px;" type="password" id="invulVeld">
+        <br>
+        <button style="width: 250px; background-color:green; border: none; color:	#ADFF2F; font-size: 22px; border: 2px solid black ;">Controleer</button>
+        <div id="antwoord"></div>
+    </div>
+</body>
+</html>
